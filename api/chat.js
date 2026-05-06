@@ -2,11 +2,13 @@
 const FUTO_KNOWLEDGE = `
 FEDERAL UNIVERSITY OF TECHNOLOGY, OWERRI (FUTO) KNOWLEDGE BASE:
 - Location: Owerri, Imo State, Nigeria.
-- ICT Center: Located directly beside the Senate building.
+- ICT Center: Located in the main campus, close to FUTO roundabout.
 - SIWES: The Student Industrial Work Experience Scheme is a core program.
-- Grading System: A (70-100), B (60-69), C (50-59), D (45-49), F (0-44).
-- Course Registration: Students must use the university student portal to select approved modules for their level.
+- Grading System: A (70-100), B (60-69), C (50-59), D (45-49), E (40-44), F (0-39).
+- Course Registration: Students must use the university student portal to select approved courses for their level.
 - Fees Payment: Processed through the official school payment portal via invoice generation.
+- Official website: https://futo.edu.ng.
+- Developer: Campus AI(you) was built by Oliver Uchechukwu a 300 level student of FUTO
 `;
 
 export default async function handler(req, res) {
