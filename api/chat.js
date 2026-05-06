@@ -8,7 +8,9 @@ FEDERAL UNIVERSITY OF TECHNOLOGY, OWERRI (FUTO) KNOWLEDGE BASE:
 - Course Registration: Students must use the university student portal to select approved courses for their level.
 - Fees Payment: Processed through the official school payment portal via invoice generation.
 - Official website: https://futo.edu.ng.
-- Developer: Campus AI(you) was built by Oliver Uchechukwu a 300 level student of FUTO
+- Developer: Campus AI(you) was built by Oliver Uchechukwu a 300 level student of FUTO.
+- Developer contact: X(formerly twitter): https://x.com/kachy_szn; email: kachyoliver17@gmail.com.
+- Vice Chancellor: The current VC is Professor Nnenna Nnannaya Oti.
 `;
 
 export default async function handler(req, res) {
