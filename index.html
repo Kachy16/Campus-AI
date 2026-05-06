@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Campus AI — Your Always-On Campus Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0b0f1a;
+    --paper: #f5f1e8;
+    --paper-2: #ece5d3;
+    --line: #1a2030;
+    --accent: #d6ff3c;       
+    --accent-2: #ff6b3d;     
+    --accent-3: #5b8def;     
+    --muted: #6a6e78;
+    --card: #ffffff;
+    --shadow-sm: 0 1px 0 rgba(11,15,26,.06), 0 2px 6px rgba(11,15,26,.05);
+    --shadow-lg: 0 30px 60px -20px rgba(11,15,26,.25), 0 18px 36px -18px rgba(11,15,26,.18);
+    --radius: 18px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ——— Background scenery ——— */
+  .scenery {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(91,141,239,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, rgba(214,255,60,.18), transparent 55%),
+      radial-gradient(700px 500px at 50% 110%, rgba(255,107,61,.14), transparent 60%),
+      var(--paper);
+  }
+  .scenery::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(11,15,26,.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse at center, #000 40%, transparent 80%);
+  }
+
+  /* ——— Top bar ——— */
+  .topbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 22px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; letter-spacing: -0.01em; }
+  .mark {
+    width: 38px; height: 38px; border-radius: 11px;
+    background:
+      conic-gradient(from 220deg at 50% 50%, var(--accent) 0 25%, var(--accent-3) 25% 60%, var(--accent-2) 60% 100%);
+    display: grid; place-items: center;
+    box-shadow: inset 0 0 0 2px var(--ink);
+    position: relative;
+  }
+  .mark::after {
+    content: ""; width: 14px; height: 14px; background: var(--ink);
+    border-radius: 4px;
+  }
+  .brand-name { font-size: 1.05rem; }
+  .brand-name b { font-weight: 700; }
+  .brand-name span { color: var(--muted); font-weight: 500; }
+
+  .nav { display: flex; align-items: center; gap: 18px; font-size: .92rem; color: var(--muted); }
+  .nav a { color: inherit; text-decoration: none; }
+  .nav a:hover { color: var(--ink); }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 12px; border-radius: 999px;
+    background: var(--ink); color: var(--paper);
+    font-size: .82rem; font-weight: 500;
+  }
+  .pill .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(214,255,60,.25);
+    animation: blink 2.2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.55} }
+
+  /* ——— Layout ——— */
+  .stage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 28px 80px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  /* ——— Hero ——— */
+  .hero { padding: 28px 4px 0; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .78rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 6px 10px; border: 1px solid rgba(11,15,26,.12);
+    border-radius: 999px; background: rgba(255,255,255,.5); backdrop-filter: blur(6px);
+  }
+  .eyebrow b { color: var(--ink); font-weight: 600; }
+
+  h1.headline {
+    font-family: "Fraunces", "Times New Roman", serif;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 22px 0 16px;
+  }
+  h1.headline .ink-stroke {
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  h1.headline em {
+    font-style: italic; font-weight: 300;
+    position: relative; white-space: nowrap;
+  }
+  h1.headline em::after {
+    content: "";
+    position: absolute; left: -2px; right: -2px; bottom: .08em; height: .42em;
+    background: var(--accent); z-index: -1; border-radius: 2px;
+    transform: skewX(-6deg);
+  }
+
+  .lede { font-size: 1.075rem; color: #353846; max-width: 50ch; margin: 0 0 26px; }
+
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 10px 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .78rem; color: var(--muted);
+    padding: 14px 0; border-top: 1px dashed rgba(11,15,26,.18);
+    border-bottom: 1px dashed rgba(11,15,26,.18);
+    margin-bottom: 28px;
+  }
+  .meta-row span b { color: var(--ink); font-weight: 600; }
+
+  /* ——— Topic chips (FAQ) ——— */
+  .topics { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .topic {
+    display: grid; grid-template-columns: 36px 1fr auto;
+    align-items: center; gap: 14px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid rgba(11,15,26,.08);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer; user-select: none;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    text-align: left;
+  }
+  .topic:hover { transform: translateY(-1px); border-color: var(--ink); box-shadow: var(--shadow-lg); }
+  .topic .num {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--ink); color: var(--paper);
+    display: grid; place-items: center;
+    font-family: "JetBrains Mono", monospace; font-size: .78rem; font-weight: 600;
+  }
+  .topic .label { font-weight: 600; font-size: .98rem; }
+  .topic .label small { display: block; font-weight: 400; color: var(--muted); font-size: .82rem; margin-top: 2px; }
+  .topic .arrow {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid rgba(11,15,26,.18);
+    display: grid; place-items: center;
+    transition: background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+  }
+  .topic:hover .arrow { background: var(--accent); border-color: var(--ink); transform: rotate(-45deg); }
+  .topic .arrow svg { width: 14px; height: 14px; }
+
+  /* ——— Chat surface ——— */
+  .chat-shell {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .chat-shell::before {
+    content: "";
+    position: absolute; inset: -40%;
+    background:
+      radial-gradient(closest-side, rgba(214,255,60,.10), transparent 70%) 20% 10%/60% 60% no-repeat,
+      radial-gradient(closest-side, rgba(91,141,239,.18), transparent 70%) 90% 90%/60% 60% no-repeat;
+    z-index: 0; pointer-events: none;
+  }
+  .chat-shell > * { position: relative; z-index: 1; }
+
+  .chat-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 6px 16px;
+    border-bottom: 1px solid rgba(245,241,232,.08);
+    margin-bottom: 14px;
+  }
+  .chat-id { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 12px;
+    background:
+      conic-gradient(from 200deg at 50% 50%, var(--accent) 0 30%, var(--accent-3) 30% 65%, var(--accent-2) 65% 100%);
+    display: grid; place-items: center;
+    box-shadow: inset 0 0 0 1px rgba(245,241,232,.2);
+  }
+  .avatar::after {
+    content: ""; width: 12px; height: 12px; background: var(--ink); border-radius: 3px;
+  }
+  .chat-id .who { line-height: 1.15; }
+  .chat-id .who b { font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; }
+  .chat-id .who small { display: block; color: rgba(245,241,232,.55); font-size: .78rem; }
+  .chat-actions {
+    display: flex; gap: 8px;
+    font-family: "JetBrains Mono", monospace; font-size: .72rem;
+    color: rgba(245,241,232,.55);
+  }
+  .ind { display: inline-flex; align-items: center; gap: 6px; }
+  .ind::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  .chat-box {
+    height: 360px;
+    overflow-y: auto;
+    padding: 6px 4px 6px 2px;
+    display: flex; flex-direction: column; gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(245,241,232,.18) transparent;
+  }
+  .chat-box::-webkit-scrollbar { width: 8px; }
+  .chat-box::-webkit-scrollbar-thumb { background: rgba(245,241,232,.14); border-radius: 8px; }
+
+  .message {
+    padding: 12px 14px;
+    border-radius: 14px;
+    max-width: 82%;
+    line-height: 1.5;
+    font-size: .96rem;
+    word-wrap: break-word;
+    animation: rise .35s ease both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .message strong {
+    display: block;
+    font-size: .7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: 4px; opacity: .7;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .user-msg {
+    background: var(--accent);
+    color: var(--ink);
+    align-self: flex-end; margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .user-msg strong { opacity: .55; }
+  .bot-msg {
+    background: rgba(245,241,232,.08);
+    color: var(--paper);
+    border: 1px solid rgba(245,241,232,.08);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* ——— Input ——— */
+  .input-area {
+    margin-top: 14px;
+    display: flex; gap: 10px;
+    background: rgba(245,241,232,.06);
+    border: 1px solid rgba(245,241,232,.12);
+    padding: 8px;
+    border-radius: 16px;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .input-area:focus-within {
+    border-color: var(--accent);
+    background: rgba(245,241,232,.09);
+  }
+  input[type="text"]#user-input {
+    flex: 1 1 0%; /* Fixes Flexbox overflow blowout */
+    min-width: 0; /* CRUCIAL: Stops input from pushing button off-screen */
+    padding: 12px 14px;
+    border: none; outline: none;
+    background: transparent;
+    color: var(--paper);
+    font: inherit; font-size: 1rem;
+  }
+  input[type="text"]#user-input::placeholder { color: rgba(245,241,232,.4); }
+
+  button#send-btn {
+    padding: 12px 20px;
+    background: var(--accent);
+    color: var(--ink);
+    border: none;
+    border-radius: 10px;
+    font: inherit; font-weight: 600; font-size: .95rem;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .12s ease, background .18s ease;
+    flex-shrink: 0; /* Keeps the button its normal size */
+  }
+  button#send-btn:hover { background: #e6ff66; transform: translateY(-1px); }
+  button#send-btn:active { transform: translateY(0); }
+  button#send-btn:disabled { background: rgba(245,241,232,.18); color: rgba(245,241,232,.5); cursor: not-allowed; transform: none; }
+  button#send-btn svg { width: 14px; height: 14px; }
+
+  .hint {
+    margin-top: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "JetBrains Mono", monospace; font-size: .72rem;
+    color: rgba(245,241,232,.5);
+  }
+  .kbd {
+    border: 1px solid rgba(245,241,232,.2);
+    padding: 2px 6px; border-radius: 4px;
+    background: rgba(245,241,232,.06);
+  }
+
+  /* ——— Footer strip ——— */
+  .strip {
+    max-width: 1200px; margin: 0 auto; padding: 0 28px 30px;
+    display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: space-between;
+    color: var(--muted); font-size: .82rem;
+  }
+  .strip b { color: var(--ink); font-weight: 600; }
+
+  /* ==========================================================================
+     MOBILE RESPONSIVENESS
+     ========================================================================== */
+  @media (max-width: 960px) {
+    .stage { grid-template-columns: 1fr; gap: 28px; padding-bottom: 60px; }
+  }
+
+  @media (max-width: 768px) {
+    /* Topbar adjustments */
+    .topbar { padding: 16px 20px; }
+    .brand-name span { display: none; } /* Hide "· FUTO Support" to save space */
+    .nav { gap: 14px; font-size: 0.85rem; }
+    .nav a { display: none; } /* Hide Topics/Ask links to avoid cramping */
+    
+    /* Layout adjustments */
+    .stage { padding: 16px 20px 40px; gap: 32px; }
+    
+    /* Typography scale-down */
+    h1.headline { font-size: clamp(2.2rem, 8vw, 3rem); margin: 12px 0; }
+    .lede { font-size: 1rem; margin-bottom: 20px; }
+    .meta-row { gap: 10px 16px; padding: 12px 0; margin-bottom: 24px; }
+
+    /* Topic cards scale-down */
+    .topic { padding: 12px; grid-template-columns: 32px 1fr 28px; gap: 10px; }
+    .topic .num { width: 32px; height: 32px; font-size: 0.75rem; }
+    .topic .label { font-size: 0.95rem; }
+    .topic .label small { font-size: 0.8rem; }
+    .topic .arrow { width: 28px; height: 28px; }
+
+    /* Chat UI tightening */
+    .chat-shell { padding: 16px; border-radius: 18px; }
+    .chat-head { padding-bottom: 12px; margin-bottom: 10px; }
+    .avatar { width: 32px; height: 32px; }
+    .chat-id .who b { font-size: 0.95rem; }
+    
+    .chat-box { height: 320px; gap: 10px; }
+    .message { max-width: 90%; font-size: 0.9rem; padding: 10px 12px; }
+
+    /* Input area fixes */
+    .input-area { padding: 6px; border-radius: 14px; gap: 8px; }
+    input[type="text"]#user-input { 
+      padding: 10px; 
+      font-size: 16px; /* 16px minimum prevents iOS Safari from auto-zooming */
+    }
+    button#send-btn { padding: 10px 16px; font-size: 0.9rem; border-radius: 8px; }
+    
+    /* Footer tweaks */
+    .hint { flex-direction: column; gap: 8px; align-items: center; text-align: center; margin-top: 12px; }
+    .strip { padding: 0 20px 30px; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  }
+
+  @media (max-width: 400px) {
+    /* Ultra-small phones */
+    button#send-btn span.btn-text { display: none; } /* Hides "Send" text, keeps icon */
+    button#send-btn { padding: 10px 14px; }
+    button#send-btn svg { margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scenery" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="mark" aria-hidden="true"></div>
+    <div class="brand-name"><b>Campus AI</b> &nbsp;<span>· FUTO Support</span></div>
+  </div>
+    <nav class="nav" aria-label="primary">
+    <a href="#topics">Topics</a>
+    <a href="#chat">Ask</a>
+    <button id="download-btn" class="pill" style="cursor: pointer; border: none; font-family: inherit;">
+      ⬇ Download Chat
+    </button>
+    <span class="pill"><span class="dot"></span> Online · 24/7</span>
+  </nav>
+
+</header>
+
+<main class="stage">
+  <section class="hero" id="topics">
+    <span class="eyebrow"><b>v1.0</b> · A campus assistant for staff &amp; students</span>
+
+    <h1 class="headline">
+      <span class="ink-stroke">Answers about</span><br />
+      campus life, <em>instantly.</em>
+    </h1>
+
+    <p class="lede">
+      Campus AI is your always-on guide for fees, registration, ICT, hostels and everything in between at Federal University of Technology, Owerri. Skip the queue — just ask.
+    </p>
+
+    <div class="meta-row">
+      <span><b>200+</b> topics covered</span>
+      <span><b>~1.4s</b> avg. response</span>
+      <span><b>FUTO-trained</b> knowledge</span>
+    </div>
+
+    <div class="topics" role="list">
+      <button class="topic" type="button" data-q="How do I pay my school fees?" role="listitem">
+        <span class="num">01</span>
+        <span class="label">Paying your fees
+          <small>Bursary process, payment portal &amp; invoice generation</small>
+        </span>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg>
+        </span>
+      </button>
+
+      <button class="topic" type="button" data-q="Where is the IT Support desk?" role="listitem">
+        <span class="num">02</span>
+        <span class="label">Finding IT Support
+          <small>The ICT center sits beside the Senate building</small>
+        </span>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg>
+        </span>
+      </button>
+
+      <button class="topic" type="button" data-q="How do I register my courses?" role="listitem">
+        <span class="num">03</span>
+        <span class="label">Course registration
+          <small>Student portal walk-through for approved modules</small>
+        </span>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M9 7h8v8"/></svg>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <section class="chat-shell" id="chat" aria-label="Chat with Campus AI">
+    <div class="chat-head">
+      <div class="chat-id">
+        <div class="avatar" aria-hidden="true"></div>
+        <div class="who"><b>Campus AI</b><small>Trained on FUTO knowledge · v1.0</small></div>
+      </div>
+      <div class="chat-actions">
+        <span class="ind">live</span>
+      </div>
+    </div>
+
+    <div id="chat-box" class="chat-box" aria-live="polite">
+      <div class="message bot-msg"><strong>Campus AI:</strong>Hi there! I'm Campus AI — your guide to life at FUTO. Ask me about fees, registration, hostels, ICT, or anything campus-related.</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Ask about fees, registration, ICT…" autocomplete="off" />
+      <button id="send-btn" type="button">
+        <span class="btn-text">Send</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="hint">
+      <span>Press <span class="kbd">Enter</span> to send</span>
+      <span>Powered by Groq</span>
+    </div>
+  </section>
+</main>
+
+<footer class="strip">
+  <span><b>Campus AI</b> · Federal University of Technology, Owerri</span>
+  <span>© 2026 · Built for students &amp; staff by Kachy</span>
+</footer>
+
+<script>
+  // Quick-fill the input when a topic chip is clicked.
+  document.querySelectorAll('.topic[data-q]').forEach(el => {
+    el.addEventListener('click', () => {
+      const input = document.getElementById('user-input');
+      input.value = el.dataset.q;
+      input.focus();
+      document.getElementById('chat').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+<script src="script.js"></script>
+</body>
+</html>
