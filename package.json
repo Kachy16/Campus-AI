@@ -1,0 +1,29 @@
+{
+  "name": "campus-ai",
+  "version": "1.0.0",
+  "description": "Campus AI - Your Always-On Campus Companion for Federal University of Technology, Owerri (FUTO)",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kachy16/Campus-AI.git"
+  },
+  "keywords": [
+    "campus",
+    "ai",
+    "chatbot",
+    "futo",
+    "university"
+  ],
+  "author": "Oliver Uchechukwu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kachy16/Campus-AI/issues"
+  },
+  "homepage": "https://github.com/Kachy16/Campus-AI#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
